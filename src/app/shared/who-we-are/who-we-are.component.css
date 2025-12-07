@@ -288,7 +288,8 @@ header {
 .metrics {
   display: flex;
   gap: 22px;
-  margin-top: 28px
+  margin-top: 28px;
+  flex-wrap: wrap;
 }
 
 .metric {
@@ -375,6 +376,14 @@ header {
 
   .visual {
     height: 220px
+  }
+
+  .metrics {
+    justify-content: center;
+  }
+
+  .container-card .card {
+    max-width: 40vh !important;
   }
 
 }
