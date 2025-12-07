@@ -1,0 +1,148 @@
+<div>
+  <div class="header">
+    <div class="div-toggle">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon *ngIf="!drawer.opened">menu</mat-icon>
+        <mat-icon *ngIf="drawer.opened">keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="userIsLoggedIn">
+      <span style="color: white;">Bem vindo, </span><span style="color: #00d4d8;">{{ userName }}</span>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-button routerLink="/security" matTooltip="Gerencie a segurança de sua conta"
+          matTooltipPosition="left">
+          <mat-icon>security</mat-icon>
+          <span>Segurança</span>
+        </button>
+        <button mat-menu-item matTooltip="Sair da Conta" matTooltipPosition="after" (click)="logOut()" color="warn">
+          <mat-icon>exit_to_app</mat-icon>Sair
+        </button>
+      </mat-menu>
+    </div>
+    <div class="access-button" *ngIf="!userIsLoggedIn">
+      <button mat-stroked-button class="button-list" color="primary" matTooltip="Acessar Conta"
+        matTooltipPosition="after" (click)="login()">
+        <mat-icon color="primary">login</mat-icon>Acessar
+      </button>
+      <button mat-flat-button class="button-list" color="primary" matTooltip="Conheça nossos planos"
+        matTooltipPosition="after" routerLink="/who-we-are">
+        <mat-icon>currency_exchange</mat-icon>Obtenha Mais Spreads E Lucre Mais
+
+      </button>
+    </div>
+  </div>
+  <mat-drawer-container class="container" hasBackdrop="true" autosize>
+    <mat-drawer #drawer mode="side" class="drawer">
+      <div class="drawer-content">
+        <mat-list role="list">
+
+          <mat-list-item role="listitem" class="logo-listitem">
+            <div class="div-logo-login">
+              <a routerLink="/">
+                <img src="../assets/logo.png" alt="Logotipo" width="150px" height="70px" />
+              </a>
+            </div>
+          </mat-list-item>
+
+          <mat-list-item role="listitem">
+            <button mat-button class="nav-button" routerLink="/arbitragens"
+              matTooltip="Identifique oportunidades de Arbitragem" matTooltipPosition="below">
+              <mat-icon color="primary">currency_exchange</mat-icon>
+              <span>Arbitragem</span>
+            </button>
+          </mat-list-item>
+
+          <mat-list-item role="listitem" matTooltip="Em Breve">
+            <button mat-button class="nav-button" matTooltipPosition="below" disabled>
+              <mat-icon>upcoming</mat-icon>
+              <span>Arbitragem Triangular</span>
+            </button>
+          </mat-list-item>
+
+          <mat-list-item role="listitem">
+            <button mat-button class="nav-button" routerLink="/" matTooltip="Saiba mais sobre a Arbitrax"
+              matTooltipPosition="below">
+              <mat-icon color="primary">info</mat-icon>
+              <span>Sobre nós</span>
+            </button>
+          </mat-list-item>
+
+          <mat-list-item role="listitem" *ngIf="adm">
+            <button mat-button class="nav-button" routerLink="/operations"
+              matTooltip="Acompanhe as operações automáticas" matTooltipPosition="below">
+              <mat-icon color="primary">android</mat-icon>
+              <span>Operações</span>
+            </button>
+          </mat-list-item>
+
+          <mat-list-item role="listitem">
+            <button mat-button class="nav-button" routerLink="/security" matTooltip="Gerencie a segurança de sua conta"
+              matTooltipPosition="below">
+              <mat-icon color="primary">security</mat-icon>
+              <span>Segurança</span>
+            </button>
+          </mat-list-item>
+
+          <mat-list-item role="listitem" *ngIf="adm">
+            <a mat-raised-button class="nav-button" href="crypto-adm">
+              <mat-icon color="primary">attach_money</mat-icon>Criptomoedas
+            </a>
+          </mat-list-item>
+          <mat-list-item role="listitem" *ngIf="adm">
+            <a mat-raised-button class="nav-button" href="exchange-adm">
+              <mat-icon color="primary">domain</mat-icon>Exchanges
+            </a>
+          </mat-list-item>
+          <mat-list-item role="listitem" *ngIf="adm">
+            <a mat-raised-button class="nav-button" href="exchange-withdrawal-fee">
+              <mat-icon color="primary">money_off</mat-icon>Taxas
+            </a>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <a mat-raised-button class="nav-button" href="user-adm" *ngIf="adm">
+              <mat-icon color="primary">people</mat-icon>Usuários
+            </a>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <a mat-raised-button class="nav-button" href="config-adm" *ngIf="adm">
+              <mat-icon color="primary">settings</mat-icon>Configurações
+            </a>
+          </mat-list-item>
+        </mat-list>
+        <div class="spacer"></div>
+        <mat-divider color="primary"></mat-divider>
+        <div class="access-button" *ngIf="userIsLoggedIn">
+          <button mat-stroked-button class="button-list" color="warn" matTooltip="Sair da Conta"
+            matTooltipPosition="after" (click)="logOut()">
+            <mat-icon color="warn">exit_to_app</mat-icon>Sair
+          </button>
+        </div>
+        <div class="access-button" *ngIf="!userIsLoggedIn">
+          <button mat-stroked-button class="button-list" color="primary" matTooltip="Acessar Conta"
+            matTooltipPosition="after" (click)="login()">
+            <mat-icon color="primary">login</mat-icon>Logar
+          </button>
+        </div>
+      </div>
+    </mat-drawer>
+    <!-- <mat-drawer-content>
+      <mat-toolbar style="min-height: 100px; padding: 30px">
+        <button type="button" mat-icon-button (click)="drawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="div-logo-login">
+          <a href="/">
+            <img src="../assets/logo.png" alt="" width="150px" height="70px" />
+          </a>
+        </div>
+      </mat-toolbar>
+      <app-toolbar></app-toolbar>
+    </mat-drawer-content> -->
+
+
+    <app-toolbar></app-toolbar>
+  </mat-drawer-container>
+</div>

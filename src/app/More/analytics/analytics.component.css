@@ -1,0 +1,91 @@
+@import "../../../../node_modules/roboto-fontface/css/roboto-condensed/roboto-condensed-fontface.css";
+
+::ng-deep .advanced-pie-legend ::ng-deep .legend-items-container ::ng-deep .legend-items ::ng-deep .legend-item ::ng-deep .item-value {
+    padding: 10px !important;
+}
+
+::ng-deep .ngx-charts {
+    text {
+        fill: #fff !important;
+    }
+}
+
+h1 {
+    font-family: 'Roboto-Condensed-Bold' !important;
+    letter-spacing: 3px;
+}
+
+th,
+td,
+p {
+    font-family: 'Roboto-Condensed' !important;
+    letter-spacing: 1px;
+}
+
+.div-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.div-graphics {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 40px 0 10px 0;
+}
+
+.div-graphics h1 {
+    color: #00d4d8;
+}
+
+.div-analytics {
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+
+.div-analytics-exchanges {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+
+.div-analytic {
+    padding: 10px 80px 10px 80px;
+}
+
+hr {
+    margin: 20px 0 20px 0;
+}
+
+.mat-column-demo-position {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    transition: 0.5s;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    border-color: #00d4d8;
+}
+
+.high-percentage {
+    color: green;
+}
+
+.mid-percentage {
+    color: lightgreen;
+}
+
+.low-percentage {
+    color: orange;
+}

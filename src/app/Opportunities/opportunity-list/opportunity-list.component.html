@@ -1,0 +1,372 @@
+<div class="container">
+  <div>
+    <div class="div-dolars mat-elevation-z8">
+      <div class="fixed-item">
+        <img src="../../../assets/Cryptos/USDT.png" width="30px" style="margin-right: 10px;" />USDT
+      </div>
+      <div class="scroll-list" *ngIf="dolars.length">
+        <div *ngFor="let item of dolars" class="scroll-item">
+          <img src="../../../assets/Exchanges/{{ item.exchangeName }}.svg" width="20px" />{{ item.exchangeName }} -
+          <span> {{ item.value | currency : "BRL" : "symbol" : "1.2-2" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+        </div>
+      </div>
+    </div>
+
+    <div class="div-filters">
+      <div>
+        <mat-form-field [hidden]="cryptos.length == 0" appearance="outline">
+          <mat-label>Criptos</mat-label>
+          <mat-select [(ngModel)]="selectedCrypto" matNativeControl (selectionChange)="loadOpportunities()">
+            <mat-option>Limpar</mat-option>
+            <mat-option *ngFor="let crypto of cryptos" [value]="crypto.symbol">
+              <img src="../../../assets/Cryptos/{{ crypto.symbol }}.png" width="17px" />
+              &nbsp;{{ crypto.symbol }} - {{ crypto.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button (click)="clearCryptos()"
+          [disabled]="selectedCrypto == null"><mat-icon>clear</mat-icon></button>
+      </div>
+
+      <div>
+        <mat-form-field [hidden]="exchangesToBuy.length == 0" appearance="outline">
+          <mat-label>Compra Em:</mat-label>
+          <mat-select [(ngModel)]="selectedExchangeToBuy" matNativeControl (selectionChange)="loadOpportunities()"
+            multiple>
+            <mat-option>Limpar</mat-option>
+            <mat-option *ngFor="let exchange of exchangesToBuy" [value]="exchange.id">
+              <img src="../../../assets/Exchanges/{{ exchange.name }}.svg" width="17px" />
+              &nbsp;{{ exchange.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button (click)="clearExchangeToBuy()"
+          [disabled]="selectedExchangeToBuy == null"><mat-icon>clear</mat-icon></button>
+      </div>
+
+      <div>
+        <mat-form-field [hidden]="exchangesToSell.length == 0" appearance="outline">
+          <mat-label>Venda Em:</mat-label>
+          <mat-select [(ngModel)]="selectedExchangeToSell" matNativeControl (selectionChange)="loadOpportunities()"
+            multiple>
+            <mat-option>Limpar</mat-option>
+            <mat-option *ngFor="let exchange of exchangesToSell" [value]="exchange.id">
+              <img src="../../../assets/Exchanges/{{ exchange.name }}.svg" width="17px" />
+              &nbsp;{{ exchange.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button (click)="clearExchangeToSell()"
+          [disabled]="selectedExchangeToSell == null"><mat-icon>clear</mat-icon></button>
+      </div>
+
+      <!-- <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Lucro Mínimo</mat-label>
+          <input matInput type="number" [(ngModel)]="minProfit" min="0" required (focusout)="loadOpportunities()">
+          @if (minProfit == null) {
+          <mat-error>Informe um valor</mat-error>
+          }
+        </mat-form-field>
+      </div>-->
+    </div>
+    <div style="margin-bottom: 10px;">
+      <mat-slide-toggle class="example-margin" [checked]="checked" color="primary"
+        (toggleChange)="checked == true ? disableQuery() : activateQuery()" matTooltip="Habilita a consulta automática">
+        Automático
+      </mat-slide-toggle>
+    </div>
+    <p>Última atualização: {{ date | date : "HH:mm:ss" }}</p>
+
+    <section style="margin-bottom: 10px;">
+      <label >Visão:</label>
+      <mat-radio-group [(ngModel)]="cardVision">
+        <mat-radio-button [value]="false">Tabela</mat-radio-button>
+        <mat-radio-button [value]="true">Card</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <mat-progress-bar mode="determinate" [value]="segundosRestantes"></mat-progress-bar>
+
+    <div class="cards-container" *ngIf="isMobile || cardVision">
+      <div class="div-card" *ngFor="let opportunity of opportunities">
+        <div>
+          <mat-card appearance="outlined" class="mat-card">
+            <mat-card-header class="header-card">
+              <div mat-card-avatar><img src="../../../assets/Cryptos/{{ opportunity.symbol }}.png" width="30px"
+                  style="border-radius: 50%" />
+              </div>
+              <mat-card-title>{{opportunity.symbol}}</mat-card-title>
+              <mat-card-subtitle>{{opportunity.name}}</mat-card-subtitle>
+              <!-- <div>
+                +{{ opportunity.differencePercentage / 100 | percent : '1.2-2' }}
+              </div> -->
+            </mat-card-header>
+            <mat-card-content>
+              <div class="content-card">
+                <div class="spread-card">
+                  <h5>+{{ opportunity.differencePercentage / 100 | percent : '1.2-2' }}</h5>
+                </div>
+                <div class="exchanges-card">
+                  <div class="exchange-div">
+                    <h6>Compra</h6>
+                    <div class="exchange-div">
+                      <img src="../../../assets/Exchanges/{{ opportunity.exchangeToBuyName }}.svg" width="30px"
+                        matTooltip="{{ opportunity.exchangeToBuyName }}" />
+                    </div>
+                  </div>
+                  <div><mat-icon>arrow_right_alt</mat-icon>
+                  </div>
+                  <div class="exchange-div">
+                    <h6>Venda</h6>
+                    <div class="exchange-div">
+                      <img src="../../../assets/Exchanges/{{ opportunity.exchangeToSellName }}.svg" width="30px"
+                        matTooltip="{{ opportunity.exchangeToSellName }}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="prices-card">
+                  <p style="color: rgb(100, 218, 219);">{{ (opportunity.valueToBuy / dolar
+                    | currency : "USD" : "symbol" : "1.6-6")
+                    }}
+                  </p>
+                  <p style="color: rgb(232, 88, 124);">{{ (opportunity.valueToSell / dolar
+                    | currency : "USD" : "symbol" : "1.6-6")
+                    }}
+                  </p>
+                </div>
+                <div class="fee-card">
+                  Taxa de Saque: {{ opportunity.withdrawFee != -1 ? (opportunity.withdrawFee | currency : "BRL" :
+                  "symbol" : "1.2-2") :
+                  'Indisponível'}}
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-actions class="actions-card" *ngIf="!isMobile">
+              <button mat-button color=" primary"
+                (click)="showOrderBooks(opportunity.symbol, opportunity.cryptoId, opportunity.name, opportunity.exchangeToBuyId, opportunity.exchangeToBuyName, opportunity.exchangeToSellId, opportunity.exchangeToSellName, opportunity.differencePercentage, opportunity.valueToSell)">
+                Ver Order Book</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dsOpportunities" multiTemplateDataRows class="mat-elevation-z8 table-responsive"
+      matSort *ngIf="!isMobile && !cardVision">
+
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef>Moeda</th>
+        <td mat-cell *matCellDef="let opportunity" style="max-width: 150px;">
+          <img src="../../../assets/Cryptos/{{ opportunity.symbol }}.png" width="30px"
+            style="border-radius: 50%; margin-right: 10px;" />
+          {{ opportunity.symbol }} - {{ opportunity.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Hora</th>
+        <td mat-cell *matCellDef="let opportunity">
+          {{ opportunity.hour }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valueToBuy">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Vl. Compra
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="color: greenyellow; text-align: center; line-height: 30px;">
+          {{ (opportunity.valueToBuy / dolar
+          | currency : "USD" : "symbol" : "1.6-6")
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valueToSell">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Vl. Venda
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="color: red; text-align: center; line-height: 30px;">
+          {{ (opportunity.valueToSell / dolar
+          | currency : "USD" : "symbol" : "1.6-6")
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="differencePercentage">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center;">
+          Spread
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="color: rgb(100, 218, 219); text-align: center;">
+          <b>
+            {{ opportunity.differencePercentage / 100 | percent : '1.2-2' }}
+          </b>
+          <mat-icon *ngIf="opportunity.differencePercentage > 100" color="accent"
+            matTooltip="Spread muito alto. Confirme os pares">error_outline</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalCanNegociate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="max-width: 150px;">
+          Compra Recomendada
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="text-align: center;">
+          {{(opportunity.totalCanNegociate
+          | currency : "BRL" : "symbol" : "1.2-2")
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalProfit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Média Ganho
+        </th>
+        <td mat-cell *matCellDef="let opportunity">
+          {{(opportunity.totalProfit
+          | currency : "BRL" : "symbol" : "1.2-2")
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fee">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Tax. de Negoc.
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="color: yellowgreen; text-align: center;">
+          <span>
+            {{ opportunity.fee != -1 ? (opportunity.fee / 100 | percent : "1.2-2") : 'Indisponível' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="withdrawFee">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center;">
+          Tax. de Saque
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="color: yellow; white-space: pre-line; text-align: center;">
+          {{ opportunity.withdrawFee != -1 ? (opportunity.withdrawFee | currency : "BRL" : "symbol" : "1.2-2") :
+          'Indisponível'}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="liquidValue">
+        <th mat-header-cell *matHeaderCellDef>
+          Val. Liquído
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="white-space: pre-line;">
+          {{(opportunity.totalProfit - opportunity.withdrawFee
+          | currency : "BRL" : "symbol" : "1.2-2")
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="exchangeToBuy">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Compra
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="text-align: center">
+          <a href="{{ opportunity.exchangeToBuyUrl }}" target="_blank">
+            <img src="../../../assets/Exchanges/{{
+                opportunity.exchangeToBuyName
+              }}.svg" width="30px" matTooltip="{{ opportunity.exchangeToBuyName }}" matTooltipPosition="below" />
+          </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="exchangeToSell">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Venda
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="text-align: center">
+          <a href="{{ opportunity.exchangeToSellUrl }}" target="_blank">
+            <img src="../../../assets/Exchanges/{{
+                opportunity.exchangeToSellName
+              }}.svg" width="30px" matTooltip="{{ opportunity.exchangeToSellName }}" matTooltipPosition="below" />
+          </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button aria-label="expand row"
+            (click)="(expandedElement = expandedElement === element ? null : element)&& expandedElement === element ? disableQuery() : activateQuery(); $event.stopPropagation()">
+            @if (expandedElement === element) {
+            <mat-icon>keyboard_arrow_up</mat-icon>
+            } @else {
+            <mat-icon>keyboard_arrow_down</mat-icon>
+            }
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="orderBooks">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Order Books
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="text-align: center">
+          <button mat-stroked-button color=" primary"
+            (click)="showOrderBooks(opportunity.symbol, opportunity.cryptoId, opportunity.name, opportunity.exchangeToBuyId, opportunity.exchangeToBuyName, opportunity.exchangeToSellId, opportunity.exchangeToSellName, opportunity.differencePercentage, opportunity.valueToSell)">
+            Ver Order Book</button>
+        </td>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="approve">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Aprovar Arbitragem
+        </th>
+        <td mat-cell *matCellDef="let opportunity" style="text-align: center">
+          <button *ngIf="opportunity.preApproved == 0" mat-stroked-button color=" primary"
+            (click)="approveOperation(opportunity.id)">Aprovar
+            Arb.</button>
+        </td>
+      </ng-container> -->
+
+      <!-- <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div>
+              <app-order-book *ngIf="expandedElement" [data]="{symbol: expandedElement.symbol,
+                cryptoId: expandedElement.cryptoId,
+                name: expandedElement.name,
+                exchangeToBuyId: expandedElement.exchangeToBuyId,
+                exchangeToBuyName: expandedElement.exchangeToBuyName,
+                exchangeToSellId: expandedElement.exchangeToSellId,
+                exchangeToSellName: expandedElement.exchangeToSellName,
+                spread: expandedElement.differencePercentage / 100,
+                dolar: dolar}">
+              </app-order-book>
+            </div>
+            <div>
+              <hr width="100%">
+            </div>
+            <div>
+              <app-withdraw-fee *ngIf="expandedElement" [data]="{
+                cryptoId: expandedElement.cryptoId,
+                exchangeToBuyId: expandedElement.exchangeToBuyId,
+                exchangeToSellId: expandedElement.exchangeToSellId,
+                value: expandedElement.valueToSell}">
+              </app-withdraw-fee>
+            </div>
+          </div>
+        </td>
+      </ng-container> -->
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let opportunity; columns: displayedColumns;" class="example-element-row">
+      </tr>
+
+      <!-- <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr> -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">Nenhuma Arbitragem no momento</td>
+      </tr>
+    </table>
+    <mat-paginator [length]="opportunities.length" [showFirstLastButtons]="true" [pageSize]="10"
+      showFirstLastpnl-buttons #opportunitiesPaginator *ngIf="!isMobile && !cardVision"></mat-paginator>
+
+  </div>
+  <div *ngIf="loadingOpportunities" class="div-center">
+    <app-loading></app-loading>
+  </div>
+</div>

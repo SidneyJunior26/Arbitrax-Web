@@ -1,0 +1,134 @@
+.container {
+  width: auto;
+  height: 100vh;
+  background: #0e1117;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px 0 10px;
+  background-color: rgb(26, 28, 28);
+}
+
+.div-hide {
+  display: flex;
+  justify-content: end;
+}
+
+.container-login {
+  background: #28282B;
+  display: flex;
+  justify-content: space-around;
+}
+
+.div-logo-login {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-listitem {
+  margin-bottom: 20px;
+}
+
+.div-company-name {
+  display: flex;
+  justify-content: center;
+}
+
+.img-logo {
+  width: 200px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 5px 20px 5px;
+  background-color: rgb(26, 28, 28);
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+}
+
+.div-back {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-list {
+  width: 100%;
+  width: auto;
+}
+
+.button-list-adm {
+  margin-top: 5px;
+}
+
+.listitem {
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+/* Aplica o estilo a todos os botões de navegação dentro da lista */
+.nav-button {
+  width: 100%;
+  /* Faz o botão preencher o list-item */
+  display: flex;
+  justify-content: flex-start;
+  /* Alinha o conteúdo (ícone + texto) à esquerda */
+  align-items: center;
+  padding: 0 16px !important;
+  /* Ajusta o padding interno */
+  font-size: 14px;
+}
+
+/* Adiciona um espaço entre o ícone e o texto */
+.nav-button mat-icon {
+  margin-right: 16px;
+}
+
+/* Opcional: Customizar a cor do hover, caso a padrão não agrade */
+.nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  /* Um cinza bem claro */
+}
+
+.adm-expansion {
+  height: auto !important;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.access-button,
+.adm-button {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.mat-expansion-indicator::after {
+  transform: rotate(225deg) !important;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+mat-icon {
+  margin-right: 15px;
+}
+
+.div-toggle {
+  margin: 20px;
+}

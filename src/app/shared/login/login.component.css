@@ -1,0 +1,21 @@
+.modal-login {
+    width: 40vh;
+    height: auto;
+    background-color: #1a1c1c;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px 40px 40px 40px;
+}
+
+.login {
+    font-family: Roboto-Condensed-Bold !important;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    padding-top: 30px;
+}
+
+.mdc-dialog__surface {
+    overflow-y: hidden !important;
+}

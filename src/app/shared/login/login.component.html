@@ -1,0 +1,30 @@
+<div class="modal-login" [formGroup]="loginControl">
+    <h3 class="login">LOGIN</h3>
+    <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        @if (loginControl.get('email')?.hasError('required')) {
+        <mat-error>Informe seu Email</mat-error>
+        } @if (loginControl.get('email')?.hasError('email')) {
+        <mat-error>Email inválido</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput formControlName="password" [type]="hide() ? 'password' : 'text'" />
+        <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (loginControl.get('password')?.hasError('required')) {
+        <mat-error>Informe sua Senha</mat-error>
+        }
+    </mat-form-field>
+    <div><a href="">Esqueci minha senha</a></div>
+    <br />
+    <button mat-flat-button [disabled]="loginControl.invalid || loggingIn" type="submit" (click)="login()"
+        [class.spinner]="loggingIn">
+        {{ loggingIn ? "Acessando..." : "Acessar" }}
+    </button>
+</div>

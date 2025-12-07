@@ -1,0 +1,235 @@
+<div class="container">
+  <div class="div-expansion-panel">
+    <mat-accordion class="headers-align newuser">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Cadastrar </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [formGroup]="newUserControl">
+          <div class="div-fields">
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="name" />
+                @if (newUserControl.get('name')?.hasError('required')) {
+                <mat-error>Nome é <strong>obrigatório</strong></mat-error>
+                } @if (newUserControl.get('name')?.hasError('minlength')) {
+                <mat-error
+                  >Digite no mínimo <strong>3</strong> cadacteres</mat-error
+                >
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+                @if (newUserControl.get('email')?.hasError('required')) {
+                <mat-error>Email é <strong>obrigatório</strong></mat-error>
+                }@if (newUserControl.get('email')?.hasError('email')) {
+                <mat-error>Digite um Email válido</mat-error>
+                }
+              </mat-form-field>
+              <br />
+              <mat-form-field appearance="outline">
+                <mat-label>Senha</mat-label>
+                <input matInput formControlName="password" />
+                @if (newUserControl.get('email')?.hasError('required')) {
+                <mat-error>Senha é <strong>obrigatória</strong></mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Nível</mat-label>
+                <mat-select formControlName="level">
+                  <mat-option [value]="Level.SILVER">Prata</mat-option>
+                  <mat-option [value]="Level.BRONZE">Bronze</mat-option>
+                  <mat-option [value]="Level.GOLD">Ouro</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br />
+              <mat-slide-toggle formControlName="trial"
+                >Conta Teste</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <br />
+          <button
+            mat-flat-button
+            [disabled]="newUserControl.invalid || creating"
+            type="submit"
+            (click)="createUser()"
+            [class.spinner]="creating"
+          >
+            <mat-icon>add_circle</mat-icon> Cadastrar
+          </button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion class="headers-align edituser">
+      <mat-expansion-panel
+        [disabled]="editUserControl.get('id')!.value == ''"
+        [expanded]="editUserControl.get('id')!.value != ''"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Editar </mat-panel-title>
+          <mat-panel-description>
+            {{ editUserControl.get("name")?.value }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div [formGroup]="editUserControl">
+          <div class="div-fields">
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="name" />
+                @if (newUserControl.get('name')?.hasError('required')) {
+                <mat-error>Nome é <strong>obrigatório</strong></mat-error>
+                } @if (newUserControl.get('name')?.hasError('minlength')) {
+                <mat-error
+                  >Digite no mínimo <strong>3</strong> cadacteres</mat-error
+                >
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+                @if (newUserControl.get('email')?.hasError('required')) {
+                <mat-error>Email é <strong>obrigatório</strong></mat-error>
+                }@if (newUserControl.get('email')?.hasError('email')) {
+                <mat-error>Digite um Email válido</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Nível</mat-label>
+                <mat-select formControlName="level">
+                  <mat-option [value]="Level.SILVER">Prata</mat-option>
+                  <mat-option [value]="Level.BRONZE">Bronze</mat-option>
+                  <mat-option [value]="Level.GOLD">Ouro</mat-option>
+                  <mat-option [value]="Level.ADM">Adm.</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br />
+              <mat-slide-toggle formControlName="trial"
+                >Conta Teste</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <br />
+          <div class="div-buttons-edit">
+            <button
+              mat-flat-button
+              [disabled]="editUserControl.invalid || updating"
+              type="submit"
+              (click)="updateUser()"
+              [class.spinner]="updating"
+            >
+              <mat-icon>save</mat-icon> Salvar
+            </button>
+            <button mat-flat-button (click)="cancelEdit()" color="accent">
+              <mat-icon>cancel</mat-icon> Cancelar
+            </button>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <br />
+  <br />
+  <div [hidden]="users.length > 0">
+    <app-loading></app-loading>
+  </div>
+  <div [hidden]="users.length == 0">
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Filtrar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ETH" />
+    </mat-form-field>
+    <table mat-table class="mat-elevation-z8" [dataSource]="dsUsers">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="level">
+        <th mat-header-cell *matHeaderCellDef>Nível</th>
+        <td mat-cell *matCellDef="let user">
+          <button
+            mat-icon-button
+            color="primary"
+            [matTooltip]="
+              user.level == 10
+                ? 'Administrador'
+                : user.level == 1
+                ? 'Prata'
+                : user.level == 2
+                ? 'Bronze'
+                : 'Gold'
+            "
+          >
+            <mat-icon *ngIf="user.level != 10">person</mat-icon>
+            <mat-icon *ngIf="user.level == 10">supervised_user_circle</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="trial">
+        <th mat-header-cell *matHeaderCellDef>Teste</th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-icon-button [color]="user.trial ? 'primary' : 'accent'">
+            <mat-icon *ngIf="user.trial">thumb_up</mat-icon>
+            <mat-icon *ngIf="!user.trial">thumb_down</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="trialExpiration">
+        <th mat-header-cell *matHeaderCellDef>Período Teste</th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.trialExpiration | date : "d MMMM y" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>Editar</th>
+        <td mat-cell *matCellDef="let user">
+          <button
+            mat-icon-button
+            color="accent"
+            [matTooltip]="'Editar ' + user.name"
+            (click)="loadFormEditUser(user)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Excluir</th>
+        <td mat-cell *matCellDef="let user">
+          <button
+            mat-icon-button
+            color="warn"
+            [matTooltip]="'Excluir ' + user.name"
+            (click)="deleteUser(user)"
+          >
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [length]="users.length"
+      [pageSize]="5"
+      showFirstLastpnl-buttons
+      #usersPaginator
+    ></mat-paginator>
+  </div>
+</div>

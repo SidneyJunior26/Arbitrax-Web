@@ -1,0 +1,20 @@
+<div class="container">
+  <div [formGroup]="configurationsControl" [hidden]="admConfig == null">
+    <mat-form-field appearance="outline">
+      <mat-label>Spread Mínimo</mat-label>
+      <input matInput formControlName="minSpread" type="number" />
+      <span matSuffix>%</span>
+      @if (configurationsControl.get('minSpread')?.hasError('required')) {
+      <mat-error>Spread mínimo é <strong>obrigatório</strong></mat-error>
+      } @if (configurationsControl.get('minSpread')?.hasError('min')) {
+      <mat-error>O Spread mínimo é de <strong>2%</strong></mat-error>
+      }
+    </mat-form-field>
+    <br />
+    <br />
+    <button mat-flat-button><mat-icon>save</mat-icon> Salvar</button>
+  </div>
+  <div [hidden]="admConfig != null">
+    <app-loading></app-loading>
+  </div>
+</div>

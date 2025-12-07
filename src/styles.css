@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/roboto-fontface/css/roboto-condensed/roboto-condensed-fontface.css";
+
+html,
+body {
+  height: 100%;
+  font-family: Roboto-Condensed-Bold;
+}
+
+body {
+  margin: 0;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #00d4d2;
+  animation: spinner 0.8s linear infinite;
+}

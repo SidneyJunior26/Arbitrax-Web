@@ -1,0 +1,23 @@
+<div class="container" [formGroup]="newPasswordUserControl">
+    <mat-form-field appearance="outline">
+        <mat-label>Senha atual</mat-label>
+        <input matInput formControlName="actualPassword" />
+        @if (newPasswordUserControl.get('actualPassword')?.hasError('required')) {
+        <mat-error>Informe sua senha atual</mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Nova Senha</mat-label>
+        <input matInput formControlName="newPassword" />
+        @if (newPasswordUserControl.get('newPassword')?.hasError('required')) {
+        <mat-error>Informe sua nova senha</mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Confirme sua Nova Senha</mat-label>
+        <input matInput formControlName="confirmPassword" />
+        @if (newPasswordUserControl.get('confirmPassword')?.hasError('required')) {
+        <mat-error>Confirme sua nova senha</mat-error>
+        }
+    </mat-form-field>
+</div>

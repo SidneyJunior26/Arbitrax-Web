@@ -1,0 +1,103 @@
+<div class="container">
+    <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select value="" [(ngModel)]="selectedStatus" (selectionChange)="loadOperations()">
+            <mat-option value="">Todas</mat-option>
+            <mat-option value="0">Cancelada</mat-option>
+            <mat-option value="1">Criada</mat-option>
+            <mat-option value="2">Ordem de Compra Enviada</mat-option>
+            <mat-option value="3">Aguardando Ordem de Compra</mat-option>
+            <mat-option value="4">Ordem de Compra Finalizada</mat-option>
+            <mat-option value="5">Saque Solicitado</mat-option>
+            <mat-option value="6">Ordem de Venda Enviado</mat-option>
+            <mat-option value="7">Finalizada</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <table mat-table class="mat-elevation-z8 table-responsive" [dataSource]="dsOperations">
+        <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef>Cripto</th>
+            <td mat-cell *matCellDef="let operation">
+                <img src="../../../assets/Cryptos/{{ operation.symbol }}.png" width="30px"
+                    style="border-radius: 50%; margin-right: 15px;" />{{ operation.symbol }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="buy">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">Compra</th>
+            <td mat-cell *matCellDef="let operation" style="text-align: center">
+                <a href="{{ operation.buy }}" target="_blank">
+                    <img src="../../../assets/Exchanges/{{
+                        operation.buy
+                      }}.svg" width="30px" matTooltip="{{ operation.buy }}" matTooltipPosition="below" />
+                </a>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="sell">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">Venda</th>
+            <td mat-cell *matCellDef="let operation" style="text-align: center">
+                <a href="{{ operation.sell }}" target="_blank">
+                    <img src="../../../assets/Exchanges/{{
+                        operation.sell
+                      }}.svg" width="30px" matTooltip="{{ operation.sell }}" matTooltipPosition="below" />
+                </a>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="lowerValue">
+            <th mat-header-cell *matHeaderCellDef>Valor Compra</th>
+            <td mat-cell *matCellDef="let operation">
+                {{ operation.lowerValue| currency : "BRL" : "symbol" : "1.2-2" }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="highestValue">
+            <th mat-header-cell *matHeaderCellDef>Valor Venda</th>
+            <td mat-cell *matCellDef="let operation">
+                {{ operation.highestValue| currency : "BRL" : "symbol" : "1.2-2" }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="profit">
+            <th mat-header-cell *matHeaderCellDef>Lucro</th>
+            <td mat-cell *matCellDef="let operation">
+                {{ operation.profit| currency : "BRL" : "symbol" : "1.2-2" }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="operationStatus">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">Status</th>
+            <td mat-cell *matCellDef="let operation" style="text-align: center">
+                <ng-container [ngSwitch]="operation.operationStatus">
+                    <span *ngSwitchCase="0">Cancelada</span>
+                    <span *ngSwitchCase="1">Criada</span>
+                    <span *ngSwitchCase="2">Ordem de Compra Enviada</span>
+                    <span *ngSwitchCase="3">Aguardando Ordem de Compra</span>
+                    <span *ngSwitchCase="4">Ordem de Compra Finalizada</span>
+                    <span *ngSwitchCase="5">Saque Solicitado</span>
+                    <span *ngSwitchCase="6">Ordem de Venda Enviado</span>
+                    <span *ngSwitchCase="7">Finalizada</span>
+                </ng-container>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="preApproved">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                Aprovar Arbitragem
+            </th>
+            <td mat-cell *matCellDef="let operation" style="text-align: center">
+                <button *ngIf="operation.preApproved == 0 && operation.operationStatus == 1" mat-stroked-button
+                    color=" primary" (click)="approveOperation(operation.opportunityId)">Aprovar
+                    Arb.</button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="cancel">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                Cancelar Arbitragem
+            </th>
+            <td mat-cell *matCellDef="let operation" style="text-align: center">
+                <button *ngIf="operation.operationStatus != 0" mat-stroked-button color=" primary"
+                    (click)="cancelOperation(operation.opportunityId)">Cancelar
+                    Arb.</button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div *ngIf="loadingOperations" class="div-center">
+        <app-loading></app-loading>
+    </div>
+</div>

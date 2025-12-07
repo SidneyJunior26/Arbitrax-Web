@@ -1,0 +1,27 @@
+.app-content span {
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.app-content {
+  padding: 50px;
+  margin: 10px;
+  background-color: #1a1c1c;
+}
+
+@media(max-width:640px) {
+  .app-content {
+    padding: 5px
+  }
+}
+
+.div-title {
+  margin: 20px 0 30px 0;
+}
+
+.container {
+  height: 90vh;
+}

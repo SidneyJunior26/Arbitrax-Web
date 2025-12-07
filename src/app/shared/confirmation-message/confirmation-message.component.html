@@ -1,0 +1,15 @@
+<section>
+  <h1 mat-dialog-title>{{ data.title }}</h1>
+  <div mat-dialog-content>
+    <h6>{{ data.message }}</h6>
+    <p style="color: lightcoral">
+      <i>{{ data.obs }}</i>
+    </p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()" cdkFocusInitial color="accent">
+      Não
+    </button>
+    <button mat-raised-button (click)="confirm()" color="warn">Sim</button>
+  </div>
+</section>

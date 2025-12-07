@@ -1,0 +1,41 @@
+.container {
+  padding: 10px;
+}
+
+.div-expansion-panel {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.headers-align {
+  min-width: 70vh;
+  max-width: 70vh;
+}
+
+.headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.div-fields {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.div-buttons-edit {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+td,
+th {
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+}

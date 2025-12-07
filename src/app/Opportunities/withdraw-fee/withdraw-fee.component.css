@@ -1,0 +1,48 @@
+@import "../../../../node_modules/roboto-fontface/css/roboto-condensed/roboto-condensed-fontface.css";
+
+.container {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.crypto-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+}
+
+h3 {
+    font-family: 'Roboto-Condensed-Bold' !important;
+    color: white;
+}
+
+th,
+td,
+p {
+    font-family: 'Roboto-Condensed' !important;
+    letter-spacing: 1px;
+}
+
+th,
+td {
+    text-align: center;
+}
+
+.green-row {
+    color: greenyellow;
+}
+
+.red-row {
+    color: red;
+}
